@@ -1,0 +1,11 @@
+It's [programming] the only job I can think of where I get to be both an engineer and
+an artist. There's an incredible, rigorous, technical element to it, which I like
+because you have to do very precise thinking. On the other hand, it has a wildly
+creative side where the boundaries of imagination are the only real limitation.
+
+- Andy Hertzfield
+
+Always code as if the guy who ends up maintaining your code will be
+a violent psychopath who knows where you live.
+
+- Martin Golding

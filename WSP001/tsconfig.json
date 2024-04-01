@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "strict": true,
+      "target": "es6",
+      "lib": ["es6"],
+      "esModuleInterop": true,
+      "moduleResolution": "node",
+      "noImplicitReturns": true,
+      "noUnusedLocals": true,
+      "outDir": "dist",
+      "moduleDetection": "force"
+    },
+    "exclude": ["dist"]
+  }

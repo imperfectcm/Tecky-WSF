@@ -1,0 +1,23 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node test.ts",
+    "ex1": "ts-node ex1.ts",
+    "ex2": "ts-node ex2.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.2"
+  }
+}
