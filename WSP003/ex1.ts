@@ -1,16 +1,21 @@
 import { readdir } from 'node:fs/promises';
+import path from 'path';
+import fs from 'fs';
 
-async function listAllJs(targetPath: string)  {
+async function listAllJs(targetPath: string) {
 
-    try {
-        const files = await readdir(targetPath);
-        for (const file of files)
-        if (file.substr(file.length-3) == ".js"){
-          console.log(targetPath + "\\" + file);
-        }
-      } catch (err) {
-        console.error(err);
-      } 
+  try {
+    const files = await readdir(targetPath);
+    for (const file of files) {
+      const fullPath = path.join(targetPath, file)
+      const fileExtension = path.extname(fullPath)
+      if (fileExtension == ".js") {
+        console.log(fullPath);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
 
 }
 
