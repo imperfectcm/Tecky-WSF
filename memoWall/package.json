@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@types/cookie-parser": "^1.4.7",
-    "express": "^4.19.2"
+    "@types/jsonfile": "^6.1.4",
+    "express": "^4.19.2",
+    "jsonfile": "^6.1.0"
   },
   "name": "memowall",
   "version": "1.0.0",
