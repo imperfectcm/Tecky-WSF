@@ -16,37 +16,42 @@
         <div class="container-fluid sampleAndMemoBox">
             <!-- Memo Apply Form -->
             <div class="sample">
-                <div class="form-floating">
-                    <textarea type="text" class="memoToApply" placeholder="輸入文字"></textarea>
-                </div>
 
-                <form action="/action_page.php">
+
+                <form action="/upload" method="POST" enctype="multipart/form-data">
+
+                    <div class="form-floating">
+                        <textarea type="text" name="reflection" class="memoToApply" placeholder="輸入文字"></textarea>
+                    </div>
                     <div class="mb-2">
-                        <input class="form-control-sm" id="formFileSm" type="file">
+                        <input class="form-control-sm" id="formFileSm" type="file" name="memoPic">
                     </div>
                     <div class="mb-4">
-                        <button type="submit" class="btn btn-outline-light btn-sm postBtn">Submit</button>
+                        <button type="submit" value="submit"
+                            class="btn btn-outline-light btn-sm postBtn">Submit</button>
                     </div>
                 </form>
 
-                <form action="/action_page.php">
+                <form action="/adminLogIn" method="POST">
                     <div class="mb-1 whiteWord">
                         連儂管理員專用
                     </div>
                     <div class="mb-1">
                         <!-- <label for="userName" class="visually-hidden">User Name</label> -->
-                        <input type="userName" class="form-control" id="userName" placeholder="User Name">
+                        <input type="userName" name="userName" class="form-control" id="userName"
+                            placeholder="User Name">
                     </div>
                     <div class="mb-2">
                         <!-- <label for="inputPassword" class="visually-hidden">Password</label> -->
-                        <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                        <input type="password" name="password" class="form-control" id="inputPassword"
+                            placeholder="Password">
                     </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-outline-light btn-sm logInBtn">Submit</button>
                     </div>
                 </form>
-                
-                <a href="#" class="link-light ">
+
+                <a href="#" class="link-light">
                     Log in via Google
                 </a>
 
@@ -58,7 +63,7 @@
             <div class="memoArea">
 
                 <div class="memo">
-                    
+
                     <button type="button" class="btn btn-light deleteBtn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-trash3">
@@ -82,7 +87,7 @@
                 </div>
 
                 <div class="memo">
-                    
+
                     <button type="button" class="btn btn-light deleteBtn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-trash3">
@@ -106,7 +111,7 @@
                 </div>
 
                 <div class="memo">
-                    
+
                     <button type="button" class="btn btn-light deleteBtn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-trash3">
@@ -130,7 +135,7 @@
                 </div>
 
                 <div class="memo">
-                    
+
                     <button type="button" class="btn btn-light deleteBtn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-trash3">
@@ -154,7 +159,7 @@
                 </div>
 
                 <div class="memo">
-                    
+
                     <button type="button" class="btn btn-light deleteBtn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-trash3">
@@ -178,7 +183,7 @@
                 </div>
 
             </div>
-            
+
         </div>
     </div>
 

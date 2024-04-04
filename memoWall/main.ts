@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import path from 'path';
 import expressSession from "express-session";
 import jsonfile from "jsonfile";
+import formidable from 'formidable';
+import fs from 'fs';
 
 declare module "express-session" {
     interface SessionData {
@@ -11,6 +13,10 @@ declare module "express-session" {
         firstTime?: boolean;
     }
 }
+
+const uploadDir = 'memoPic'
+fs.mkdirSync(uploadDir, { recursive: true })
+
 const app = express();
 app.use(
     expressSession({
@@ -20,56 +26,49 @@ app.use(
     })
 );
 
-
-
-
-app.use((req, res, next) => {
-    if (req.session.count != undefined) {
-        req.session.count++;
-    } else {
-        req.session.count = 1;
-    }
-    req.session.save()
-    console.log("session counter: ", req.session.count, " times")
-    next()
-})
-
-
-
-
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
+
+// app.use((req, res, next) => {
+//     if (req.session.count != undefined) {
+//         req.session.count++;
+//     } else {
+//         req.session.count = 1;
+//     }
+//     req.session.save()
+//     console.log("session counter: ", req.session.count, " times")
+//     next()
+// })
 
 let date_time = new Date();
-// get current date
-// adjust 0 before single digit date
 let date = ("0" + date_time.getDate()).slice(-2);
-
-// get current month
 let month = ("0" + (date_time.getMonth() + 1)).slice(-2);
-
-// get current year
 let year = date_time.getFullYear();
-
-// get current hours
 let hours = date_time.getHours();
-
-// get current minutes
 let minutes = date_time.getMinutes();
-
-// get current seconds
 let seconds = date_time.getSeconds();
+let currentTime = (year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
+let counter = 0
 
-// prints date & time in YYYY-MM-DD HH:MM:SS format
-export let currentTime = (year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
-
-
-
+const form = formidable({
+    // other fields omitted
+    filename: (originalName, originalExt, part, form) => {
+        let fieldName = part.name
+        let timestamp = (year + month + date + hours + minutes + seconds)
+        let ext = part.mimetype?.split('/').pop()
+        counter++
+        return `${fieldName}-${timestamp}-${counter}.${ext}`
+    },
+    uploadDir,
+    keepExtensions: true,
+    maxFiles: 1,
+    maxFileSize: 200 * 1024, // the default limit is 200KB
+    filter: part => part.mimetype?.startsWith('image/') || false,
+})
 
 app.get('/hello', function (req: Request, res: Response) {
     res.end("Hello World2")
 })
-
 
 
 
@@ -106,35 +105,40 @@ app.delete('/students', (req, res) => {
 
 
 
-
-app.post('/', async (req, res) => {
+app.post('/upload-textVersion', async (req, res) => {
+    await console.log("New memo uploaded: ", req.body)
     const memos = await jsonfile.readFile(path.resolve('./memos.json'))
-    const { content, image } = req.body
-    memos.push({
-        content,
-        image
-    })
-    await jsonfile.writeFile(path.resolve('./memos.json'), memos, { spaces: 4 })
-    console.log(memos)
+    memos.push(req.body)
+    await jsonfile.writeFile(path.resolve('./memos.json'), memos, { spaces: 4, encoding:'utf8'})
     res.redirect('/')
 })
 
-// app.use('/', express.static(path.join(__dirname, 'public')))
+app.post('/upload', (req, res) => {
+    form.parse(req, async (err, fields, files) => {
+        if (err) {
+            console.log(err)
+            res.redirect('/');
+        } else {
+            const memos = await jsonfile.readFile(path.resolve('./memos.json'))
+            memos.push({
+                ...fields,
+                memoPic: (files.memoPic as formidable.File).newFilename
+            })
+            await jsonfile.writeFile(path.resolve('./memos.json'), memos, { spaces: 4, encoding: 'utf8' })
+            res.redirect('/')
+        }
+    })
+})
 
-// app.use((req, res, next) => {
-//     console.log([currentTime], ` `, ` Request `, req.method, req.path)
-//     next()
-// }, express.static('public')
-// )
-
-app.use( express.static('public')
+app.use((req, res, next) => {
+    console.log([currentTime], ` `, ` Request `, req.method, req.path)
+    next()
+}, express.static('public')
 )
 
 app.use((req, res) => {
     res.sendFile(path.resolve('./public/404/404.html'))
 })
-
-
 
 const PORT = 8080;
 
