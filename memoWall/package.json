@@ -4,6 +4,7 @@
     "@types/express-session": "^1.18.0",
     "@types/formidable": "^2.0.6",
     "@types/node": "^20.12.2",
+    "@types/pg": "^8.11.5",
     "express-session": "^1.18.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
@@ -12,9 +13,11 @@
   "dependencies": {
     "@types/cookie-parser": "^1.4.7",
     "@types/jsonfile": "^6.1.4",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "formidable": "^2.1.2",
-    "jsonfile": "^6.1.0"
+    "jsonfile": "^6.1.0",
+    "pg": "^8.11.5"
   },
   "name": "memowall",
   "version": "1.0.0",
