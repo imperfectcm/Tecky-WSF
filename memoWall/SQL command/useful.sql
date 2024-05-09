@@ -8,7 +8,6 @@ CREATE TABLE user_memo_like (
     memo_id INTEGER
 );
 
-pgClient.query("SELECT memos.id,users.id,name,password FROM users INNER JOIN memos ON email = $1",[(email)])
 
 (`INSERT INTO user_memo_like (user_id,memo_id)
 VALUES ($1,$2)`,[userId,memoId])

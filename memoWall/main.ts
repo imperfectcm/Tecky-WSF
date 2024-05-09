@@ -54,11 +54,6 @@ if (process.env.SECRET) {
     );
 }
 
-// export const memoService = new MemoService(pgClient);
-// export const memoController = new MemoController(memoService);
-// export const authService = new AuthService(pgClient);
-// export const authController = new AuthController(authService);
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

@@ -60,7 +60,6 @@ export class MemoController {
 
                 try {
                     const originalImage = (await this.memoService.pickOrignalMemo(memoId)).image;
-                    console.log(originalImage);
 
                     if (memoImage == undefined) {
                         memoImage = originalImage

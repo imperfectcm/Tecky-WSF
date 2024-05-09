@@ -1,7 +1,8 @@
 import type { Knex } from "knex";
 
 
-export async function up(knex: Knex) {
+
+async function up(knex: Knex) {
 
     await knex.schema.createTable("memos", (table) => {
         table.increments();

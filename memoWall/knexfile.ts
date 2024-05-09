@@ -1,5 +1,5 @@
 import type { Knex } from "knex";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
 dotenv.config()
 
@@ -74,4 +74,4 @@ export const config: { [key: string]: Knex.Config } = {
 
 };
 
-// module.exports = config;
+module.exports = config;

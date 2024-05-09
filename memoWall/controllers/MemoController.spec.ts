@@ -1,4 +1,4 @@
-import { Client } from "pg";
+import { Knex } from "knex";
 import { Request, Response } from "express";
 import { MemoController } from "./MemoController";
 import { MemoService } from "../services/MemoService";
@@ -7,7 +7,6 @@ import * as upload from "../utils/util";
 import {
     createRequest,
     createResponse,
-    parseForm,
 } from "../utils/util";
 
 describe("MemoController", () => {
@@ -17,7 +16,7 @@ describe("MemoController", () => {
     let res: Response;
 
     beforeEach(() => {
-        memoService = new MemoService({} as Client);
+        memoService = new MemoService({} as Knex);
 
         memoService.getAllMemosInfo = jest.fn(async () => [{ memoContent: "getAllMemosInfo", memoImage: "abc.jpg" }])
         memoService.getOneMemoInfo = jest.fn(async () => [{ memoContent: "getOneMemoInfo", memoImage: "xyz.jpg" }])
