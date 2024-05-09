@@ -36,6 +36,12 @@ body {
     color: white !important;
 }
 
+#loginArea>form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .sample>form {
     display: flex;
     flex-direction: column;
@@ -107,6 +113,32 @@ input[type='submit'] {
     bottom: -20px;
 }
 
+.likeBtn{
+    background: none;
+    border: none;
+    position: absolute;
+    left: 0px;
+    bottom: 1px;
+    filter: drop-shadow(0 0 0.6rem rgb(145, 145, 145));
+}
+
+.likeBtn-liked{
+    background: none;
+    border: none;
+    position: absolute;
+    left: 0px;
+    bottom: 1px;
+    filter: brightness(0) saturate(100%) invert(55%) sepia(51%) saturate(1825%) hue-rotate(313deg) brightness(100%) contrast(105%);
+}
+
+.likeBtn:hover{
+    filter: brightness(0) saturate(100%) invert(55%) sepia(51%) saturate(1825%) hue-rotate(313deg) brightness(100%) contrast(105%);
+}
+
+.likeBtn-liked:hover{
+    filter: brightness(0) saturate(100%) invert(99%) sepia(5%) saturate(126%) hue-rotate(296deg) brightness(116%) contrast(86%);
+}
+
 .picUploaded {
     display: flex;
     justify-content: center;
@@ -119,4 +151,14 @@ input[type='submit'] {
 .picUploaded img {
     max-height: 100%;
     max-width: 100%;
-  }
+}
+
+.memoToUpdate {
+    height: 100px !important;
+    width: 185px !important;
+    margin-top: 0;
+    margin-bottom: 10px;
+    border: none !important;
+    border-radius: 0 !important;
+    background-color: #ffeb77 !important;
+}

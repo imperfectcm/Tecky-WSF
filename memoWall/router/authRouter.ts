@@ -1,60 +1,103 @@
-import { Router, Request, Response } from "express";
-import { pgClient } from "../pgClient";
+import { Router, Request, Response, NextFunction } from "express";
+
+// import { authController } from "../main";
+
+import { AuthService } from "../services/AuthService";
+import { AuthController } from "../controllers/AuthController";
+import { knex } from "../knex";
+
+const authService = new AuthService(knex)
+const authController = new AuthController(authService)
 
 export const authRouter = Router();
 
-authRouter.post('/login', login);
+authRouter.post('/login', authController.login);
+authRouter.get('/logout', authController.logout);
+authRouter.get('/checkUser', authController.checkUser);
 
-authRouter.get('/logout', logout);
+// async function login(req: Request, res: Response) {
+//     let { email, password } = req.body;
 
-authRouter.get('/getUser', getUser);
+//     try {
+//         let userInfo = await authService.getUserInfoByEmail(email);
 
-async function login(req: Request, res: Response) {
-    let { email, password } = req.body;
-    try {
-        let userQueryResult = (
-            await pgClient.query("SELECT name,password,id FROM users WHERE email = $1", [email])).rows[0];
-        if (userQueryResult) {
-            let truePassword = userQueryResult.password;
-            if (password == truePassword) {
-                req.session.userId = userQueryResult.id;
-                req.session.username = userQueryResult.username;
-                req.session.save();
-                res.status(200).json({
-                    message: "Login success",
-                    data: { username: userQueryResult.name }
-                })
-            } else {
-                res.status(400).json({ message: "Login fail, wrong password" })
-            }
-        } else {
-            res.status(400).json({ message: "Login fail, wrong email" })
-        }
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: "Internal serer error" })
-    }
-}
+//         if (userInfo) {
+//             let truePassword = userInfo.password;
 
-async function logout(req: Request, res: Response) {
+//             if (password == truePassword) {
+//                 req.session.userId = userInfo.id;
+//                 req.session.username = userInfo.name;
+//                 req.session.save();
+//                 console.log("Logged in userId : ", req.session.userId)
+//                 console.log("Logged in username : ", req.session.username)
+//                 res.status(200).json({
+//                     userId: req.session.userId,
+//                     data: userInfo
+//                 })
+//                 return
+//             }
+//             res.status(400).json({ message: "Login failed" })
+//             return
+
+//         }
+//         res.status(400).json({ message: "Login failed" })
+//         return
+
+//     } catch (error: any) {
+//         console.log(error)
+//         res.json({ message: error.message })
+//     }
+// }
+
+// async function logout(req: Request, res: Response) {
+//     try {
+//         if (req.session.userId) {
+//             req.session.destroy(err => {
+//                 if (err) {
+//                     res.status(400).json({ message: 'Unable to log out' })
+//                     return
+//                 } else {
+//                     res.status(200)
+//                         .json({
+//                             message: 'Logout successful'
+//                         })
+//                 }
+//             })
+//         } else {
+//             res.status(400).json({ message: "You are not logged in" })
+//             return
+//         }
+//     } catch (error) {
+//         console.log(error)
+//         res.status(500).json({ message: "Internal serer error" })
+//     }
+// }
+
+
+// async function checkUser(req: Request, res: Response) {
+//     try {
+//         if (req.session.username) {
+//             res.status(200).json({
+//                 userId: req.session.userId,
+//                 data: { username: req.session.username }
+//             });
+//             return
+//         }
+
+//         res.status(400).json({ message: "You are not logged in." });
+//         return
+//     } catch (error) {
+//         console.log(error)
+//         res.status(500).json({ message: "Internal serer error" })
+//     }
+// }
+
+
+export async function isLoggedIn(req: Request, res: Response, next: NextFunction) {
     if (req.session.username) {
-        req.session.destroy(err => {
-            if (err) {
-                res.status(400).json({ message: 'Unable to log out' })
-            } else {
-                res.status(200).json({ message: 'Logout successful' })
-            }
-        })
+        next();
     } else {
         res.status(400).json({ message: "You are not logged in" })
+        return;
     }
-}
-
-
-async function getUser(req: Request, res: Response) {
-    if (req.session.username) {
-        res.status(200).json({ data: { username: req.session.username } });
-      } else {
-        res.status(400).json({ message: "You are not logged in." });
-      }
 }

@@ -1,15 +1,12 @@
 import express from "express";
-// import { Request, Response } from "express";
 import expressSession from "express-session";
 import path from 'path';
-import fs from 'fs';
-// import jsonfile from "jsonfile";
-// import formidable from 'formidable';
-// import { pgClient } from "./pgClient";
 import { authRouter } from "./router/authRouter";
+import http from "http";
+import { Server as SocketIO } from "socket.io";
 import { memoRouter } from "./router/memoRouter";
 
-const PORT = 8080;
+const PORT = 1874;
 
 declare module "express-session" {
     interface SessionData {
@@ -18,10 +15,35 @@ declare module "express-session" {
     }
 }
 
-const uploadDir = './public/memoPic'
-fs.mkdirSync(uploadDir, { recursive: true })
-
 export const app = express();
+const server = new http.Server(app);
+export const io = new SocketIO(server);
+
+io.on("connection", function (socket) {
+    // This socket is the specific socket
+    socket.emit("hello", { msg: "Hello Client" });
+
+    socket.on('login-success', (userId) => {
+        socket.join(`room-${userId}`)
+        io.to(`room-${userId}`).emit("redraw-member-page", "Welcome")
+    })
+
+    socket.on("upload-memo-success", () => {
+        io.emit("redraw-memo-area", "Memowall has been updated")
+    })
+
+    socket.on("update-memo-success", () => {
+        io.emit("redraw-memo-area", "Memowall has been updated")
+    })
+
+    socket.on("delete-memo-success", () => {
+        io.emit("redraw-memo-area", "Memowall has been updated")
+    })
+
+});
+
+
+
 if (process.env.SECRET) {
     app.use(
         expressSession({
@@ -32,10 +54,16 @@ if (process.env.SECRET) {
     );
 }
 
+// export const memoService = new MemoService(pgClient);
+// export const memoController = new MemoController(memoService);
+// export const authService = new AuthService(pgClient);
+// export const authController = new AuthController(authService);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/auth", authRouter);
+
+app.use("/", authRouter);
 app.use("/memo", memoRouter);
 
 app.use(express.static('public'));
@@ -45,6 +73,6 @@ app.use((req, res) => {
     res.sendFile(path.resolve('./public/404/404.html'))
 })
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server Listening at http://localhost:${PORT}`)
 })
