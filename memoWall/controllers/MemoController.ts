@@ -57,27 +57,29 @@ export class MemoController {
             let { memoContent, memoImage, memoId } = await parseForm(req)
 
             if (memoId) {
-
+                console.log("check memoId", memoId)
                 try {
+
                     const originalImage = (await this.memoService.pickOrignalMemo(memoId)).image;
 
                     if (memoImage == undefined) {
                         memoImage = originalImage
-                        
-                    } else {
+
+                    } else if (originalImage) {
                         await unlink(`${__dirname}/../uploads/${originalImage}`)
                     }
 
                     await this.memoService.updateMemo(memoContent, memoImage, memoId)
 
                 } catch (error) {
-                    console.log(error);
+                    console.log("Error!", error);
                     res.status(500).json({ message: "Internal server error" })
+                    return
                 }
             }
 
             res.status(200).json({
-                message: "Upload success",
+                message: "Edit success",
             })
         } catch (error: any) {
             console.log(error);

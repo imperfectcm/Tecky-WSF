@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import formidable, { Fields, Files } from "formidable";
+import formidable from "formidable";
 import { unlink } from "fs/promises";
 
 
@@ -10,7 +10,7 @@ let form = formidable({
   allowEmptyFiles: true
 })
 
-export function parseForm(req: Request) {
+export const parseForm =(req: Request) =>{
   return new Promise<{ memoContent: string | string[] | null, memoImage: string | undefined, memoId: number | null }>((resolve, reject) => {
     form.parse(req, async (err, fields, files) => {
       if (err) {
@@ -53,6 +53,7 @@ export function createRequest() {
     headers: {},
     query: {},
     body: {},
+    fields: {},
     files: {},
     params: {},
   } as unknown as Request;
